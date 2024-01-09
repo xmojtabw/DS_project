@@ -1,19 +1,19 @@
 #include "vectorT.h"
 
 template <class T>
-Vector<T>::Vector() : size(0), capacity(3)
+Vector<T>::Vector() : capacity(3), size(0)
 {
     ptr = new T[capacity];
 }
 
 template <class T>
-Vector<T>::Vector(int size) : size(size), capacity(2 * size)
+Vector<T>::Vector(int size) : capacity(2 * size), size(size)
 {
     ptr = new T[capacity];
 }
 
 template <class T>
-Vector<T>::Vector(T *p, int _size) : size(_size), capacity(2 * size)
+Vector<T>::Vector(T *p, int _size) : capacity(2 * size), size(_size)
 {
     ptr = new T[capacity];
     for (int i = 0; i < _size; i++)

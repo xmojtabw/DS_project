@@ -1,9 +1,9 @@
 #include "pizzashop.h"
 
 PizzaShop::PizzaShop(int x, int y,
-                     string n, bool is_m) : x_coordinate(x),
+                     string n, bool is_m) : name(n),
+                                            x_coordinate(x),
                                             y_coordinate(y),
-                                            name(n),
                                             is_main_branch(is_m)
 {
 }
