@@ -4,10 +4,10 @@
 #include "geometry.h"
 #include "heapsort.h"
 
-/*if debug :
-#include "geometry.cpp"
-#include "pizzashop.cpp"
-*/
+// // if debug :
+// #include "geometry.cpp"
+// #include "pizzashop.cpp"
+
 using namespace std;
 int main()
 {
@@ -34,7 +34,7 @@ int main()
     // cout << d << endl;
     // cout << isInRange(ps1, ps2, 9.6) << endl;
 
-    heapSort<PizzaShop>(myvec,
+    heapSort<PizzaShop>(myvec, 1, 4,
                         [](PizzaShop &one, PizzaShop &other) -> bool
                         { return one.getX() > other.getX(); });
     for (int i = 0; i < myvec.getSize(); i++)
