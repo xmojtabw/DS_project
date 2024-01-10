@@ -21,7 +21,15 @@ Vector<T>::Vector(T *p, int _size) : capacity(2 * size), size(_size)
         ptr[i] = p[i];
     }
 }
-
+template <class T>
+Vector<T>::Vector(const Vector<T> &other) : capacity(other.capacity), size(other.size)
+{
+    ptr = new T[capacity];
+    for (int i = 0; i < size; i++)
+    {
+        ptr[i] = other.ptr[i];
+    }
+}
 template <class T>
 void Vector<T>::pushBack(T value)
 {

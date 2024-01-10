@@ -13,6 +13,7 @@ public:
     Vector();
     Vector(int size);
     Vector(T *p, int size);
+    Vector(const Vector<T> &other);
     void pushBack(T value);
     void popBack();
     int getSize() const;

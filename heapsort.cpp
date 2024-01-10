@@ -42,17 +42,7 @@ void heapfy(Vector<T> &tree, bool (*compare)(T &one, T &other), int index, int s
 template <typename T> // sort all of the tree(from 0 to end)
 void heapSort(Vector<T> &tree, bool (*compare)(T &one, T &other))
 {
-    int size = tree.getSize();
-    for (int i = findStartIndex(size); i > -1; i--)
-    {
-        heapfy(tree, compare, i, size, 0);
-    }
-    for (int i = 0; i < tree.getSize() - 1; i++)
-    {
-        swap(tree[size - 1], tree[0]);
-        size--;
-        heapfy(tree, compare, 0, size);
-    }
+    heapSort<T>(tree, 0, tree.getSize(), compare);
 }
 template <typename T>
 void heapSort(Vector<T> &tree, int begin, int end, bool (*compare)(T &one, T &other))
@@ -61,7 +51,7 @@ void heapSort(Vector<T> &tree, int begin, int end, bool (*compare)(T &one, T &ot
     for (int i = findStartIndex(end - begin) + begin; i >= begin; i--)
     {
         // heapfy from i to end
-        heapfy(tree, compare, i, end, begin);
+        heapfy<T>(tree, compare, i, end, begin);
     }
     // swaping the root(begin) with end of it(i)
     // then heapfy the root(begin) again until(i)
@@ -69,13 +59,13 @@ void heapSort(Vector<T> &tree, int begin, int end, bool (*compare)(T &one, T &ot
     {
         swap(tree[i], tree[begin]);
         // heapfy from begin to i
-        heapfy(tree, compare, begin, i, begin);
+        heapfy<T>(tree, compare, begin, i, begin);
     }
 };
 
 template <typename T>
 void heapSort(Vector<T> &tree) // sort entire tree if "<" is defined
 {
-    heapSort(tree, 0, tree.getSize(), [](T &one, T &other) -> bool
-             { return (one < other); });
+    heapSort<T>(tree, 0, tree.getSize(), [](T &one, T &other) -> bool
+                { return (one < other); });
 }

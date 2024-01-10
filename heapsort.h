@@ -1,5 +1,5 @@
-#ifndef HEAPSORT_H
-#define HEAPSORT_H
+#ifndef _HEAPSORT_H_
+#define _HEAPSORT_H_
 #include "pizzashop.h"
 
 int findStartIndex(int size);
