@@ -1,5 +1,7 @@
 #ifndef _KDTREE_H_
 #define _KDTREE_H_
+#include <math.h>
+#include <cmath>
 #include "vectorT.h"
 // #include "pizzashop.h"
 #include "node.h"
@@ -23,5 +25,8 @@ public:
     void nodePrinter(int line, int depth, Node *node, int maxline);
     bool isBalanced();
     int findHeight();
+    int findDepth(Node*);
+    Node* findNearestNeighbor(Node* best_match,Node* point,Node* query,int depth);
+    Node* getRoot();
 };
 #endif

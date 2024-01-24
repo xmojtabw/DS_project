@@ -16,6 +16,7 @@ public:
     PizzaShop(const PizzaShop &other) = default;
     PizzaShop &operator=(const PizzaShop &other) = default;
     bool operator==(const PizzaShop &other) const;
+    int operator[](int axis);
     bool hasSamePoint(const PizzaShop &other) const;
     int getX() const;
     int getY() const;

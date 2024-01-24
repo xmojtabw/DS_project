@@ -56,6 +56,10 @@ int main()
     // {
     //     cout << another[i].getX() << " " << another[i].getY() << " " << another[i].getName() << endl;
     // }
+    PizzaShop p(3, 5, "a");
+    Node *point = new Node(p);
+    Node* best_res = kd.findNearestNeighbor(nullptr,kd.getRoot(),point,0);
     cout << "out put is " << endl;
     kd.print(4);
+
 }

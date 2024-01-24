@@ -37,3 +37,8 @@ bool PizzaShop::isMainBranch() const
 {
     return is_main_branch;
 }
+
+int PizzaShop::operator[](int axis) {
+    if(axis == 0) return this->x_coordinate;
+    else if(axis == 1) return this->y_coordinate;
+}
