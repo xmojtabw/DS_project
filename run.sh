@@ -1,2 +1,2 @@
-g++ main.cpp pizzashop.cpp geometry.cpp kdtree.cpp node.cpp -o main
+g++ main.cpp pizzashop.cpp geometry.cpp kdtree.cpp node.cpp neighborhood.cpp -o main
 ./main

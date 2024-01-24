@@ -1,24 +1,26 @@
 #include <iostream>
-#include "vectorT.h"
-#include "pizzashop.h"
+// #include "vectorT.h"
+// #include "pizzashop.h"
 #include "geometry.h"
 // #include "heapsort.h"
-#include "kdtree.h"
+// #include "kdtree.h"
+#include "neighberhood.h"
 
 // if debug :
 // #include "geometry.cpp"
 // #include "pizzashop.cpp"
 // #include "kdtree.cpp"
 // #include "node.cpp"
+// #include "neighborhood.cpp"
 
 using namespace std;
 int main()
 {
     Vector<PizzaShop> myvec;
     PizzaShop ps1(1, 11, "a");
-    PizzaShop ps2(8, 10, "b");
+    PizzaShop ps2(8, 12, "b");
     PizzaShop ps3(5, 8, "c");
-    PizzaShop ps4(4, 2, "d");
+    PizzaShop ps4(4, 1, "d");
     PizzaShop ps5(8, 3, "e");
     PizzaShop ps6(8, 9, "f");
     PizzaShop ps7(11, 5, "g");
@@ -58,4 +60,11 @@ int main()
     // }
     cout << "out put is " << endl;
     kd.print(4);
+
+    Neighberhood n("first", 4, 10, 8, 10, 8, 2, 4, 2);
+    Vector<PizzaShop> t = n.searchInKdtree(kd);
+    for (int i = 0; i < t.getSize(); i++)
+    {
+        cout << t[i].getName() << " (" << t[i].getX() << "," << t[i].getY() << ")" << endl;
+    }
 }

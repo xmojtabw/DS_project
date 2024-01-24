@@ -135,6 +135,7 @@ void KDTree::split(Vector<PizzaShop> &vec, Vector<PizzaShop> &left, Vector<Pizza
         right.pushBack(vec[i]);
     }
 }
+Node *KDTree::getRoot() { return *root; }
 Vector<PizzaShop> &KDTree::getVec()
 {
     return tree;

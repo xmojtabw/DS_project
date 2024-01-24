@@ -21,7 +21,7 @@ public:
     void build(int depth, Vector<PizzaShop> &x_sorted, Vector<PizzaShop> &y_sorted, Node *node);
     void split(Vector<PizzaShop> &vec, Vector<PizzaShop> &left, Vector<PizzaShop> &right, std::function<int(PizzaShop &val)> spliter);
     void split(Vector<PizzaShop> &vec, Vector<PizzaShop> &left, Vector<PizzaShop> &right, int median);
-
+    Node *getRoot();
     Vector<PizzaShop> &getVec();
     void print();
     void print(int line);
