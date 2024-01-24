@@ -170,13 +170,6 @@ int KDTree::findDepth(Node *node) {
     //If depth odd then axis = x and if even then axis = y
 }
 
-float distance(Node* first,Node* second) {
-    if(first == nullptr || second == nullptr) return 10000000;
-    auto dis = pow((first->getValue()[1]-second->getValue()[1]),2) +
-                                     pow((first->getValue()[0]-second->getValue()[0]),2);
-    return sqrt(dis);
-}
-
 Node* KDTree::findNearestNeighbor(Node* best_match, Node* point, Node *query, int depth) {
     int axis = depth % 2;
     Node* next_point = (point->getValue()[axis] <= point->getValue()[axis]) ? point->getLeft() : point->getRight();
@@ -194,4 +187,13 @@ Node* KDTree::findNearestNeighbor(Node* best_match, Node* point, Node *query, in
 
 Node* KDTree::getRoot() {
     return *(root);
+}
+
+/*******************************Functions************************************/
+
+float distance(Node* first,Node* second) {
+    if(first == nullptr || second == nullptr) return 10000000;
+    auto dis = pow((first->getValue()[1]-second->getValue()[1]),2) +
+               pow((first->getValue()[0]-second->getValue()[0]),2);
+    return sqrt(dis);
 }

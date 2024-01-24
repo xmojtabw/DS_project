@@ -29,4 +29,7 @@ public:
     Node* findNearestNeighbor(Node* best_match,Node* point,Node* query,int depth);
     Node* getRoot();
 };
+
+/*******************************Functions************************************/
+float distance(Node* first,Node* second);
 #endif
