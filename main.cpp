@@ -16,11 +16,11 @@ int main()
 {
     Vector<PizzaShop> myvec;
     PizzaShop ps1(1, 11, "a");
-    PizzaShop ps2(2, 9, "b");
+    PizzaShop ps2(8, 10, "b");
     PizzaShop ps3(5, 8, "c");
     PizzaShop ps4(4, 2, "d");
     PizzaShop ps5(8, 3, "e");
-    PizzaShop ps6(10, 10, "f");
+    PizzaShop ps6(8, 9, "f");
     PizzaShop ps7(11, 5, "g");
     PizzaShop ps8(12, 1, "h");
     PizzaShop ps9(1000, 100, "i");

@@ -31,7 +31,7 @@ Vector<T>::Vector(const Vector<T> &other) : capacity(other.capacity), size(other
     }
 }
 template <class T>
-void Vector<T>::pushBack(T value)
+void Vector<T>::pushBack(T &value)
 {
     if (size == capacity)
     {
