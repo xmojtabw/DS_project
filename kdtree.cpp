@@ -8,91 +8,134 @@ KDTree::KDTree(Vector<PizzaShop> &vec) : tree(vec), pos(0)
 void KDTree::build()
 {
     int size = tree.getSize();
-
-    heapSort<PizzaShop>(tree, [](PizzaShop &one, PizzaShop &other) -> bool
-                        { return one.getX() > other.getX(); });
     int median = size / 2;
+    Vector<PizzaShop> y_sorted = tree;
+    Vector<PizzaShop> x_sorted = tree;
+    heapSort<PizzaShop>(x_sorted, [](PizzaShop &one, PizzaShop &other) -> bool
+                        { 
+                            if(one.getX() > other.getX())return true;
+                            if(one.getX() < other.getX())return false;
+                            //if the have same X sort it with y 
+                            return one.getY() > other.getY(); });
+    heapSort<PizzaShop>(y_sorted, [](PizzaShop &one, PizzaShop &other) -> bool
+                        {                       
+                            if(one.getY() > other.getY())return true;
+                            if(one.getY() < other.getY())return false;
+                            //if the have same X sort it with y 
+                            return one.getX() > other.getX(); });
+
+    // sorting both vectors with x-axis and y-axis
+    PizzaShop &median_val = x_sorted[median];
     root = new Node *;
-    *root = new Node(tree[median]);
+    *root = new Node(median_val);
+
+    Vector<PizzaShop> left_x_sorted;
+    Vector<PizzaShop> left_y_sorted;
+    Vector<PizzaShop> right_x_sorted;
+    Vector<PizzaShop> right_y_sorted;
+
+    split(x_sorted, left_x_sorted, right_x_sorted, median);
+    // bool lambd = [tree]()
+    split(y_sorted, left_y_sorted, right_y_sorted,
+          [median_val](PizzaShop &val) -> int
+          {
+              if (val.getX() > median_val.getX())return 1;
+              if (val.getX() < median_val.getX())return -1;
+              // since the have same X with median:
+              if (val.getY() > median_val.getY())return 1; // after median
+              if (val.getY() < median_val.getY())return -1; // before median
+              else return 0; }); /// its median
     pos = 1;
-    build(1, 0, median, *root); // left of it
+    build(1, left_x_sorted, left_y_sorted, *root); // build left of it
     pos = 2;
-    build(1, median + 1, size, *root); // right of it
-    // for (int i = 0; i < size; i++)
-    // {
-    //     tree[i] = temp[i];
-    // }
+    build(1, right_x_sorted, right_y_sorted, *root); // build right of it
 }
-void KDTree::build(int depth, int begin, int end, Node *node)
+void KDTree::build(int depth, Vector<PizzaShop> &x_sorted, Vector<PizzaShop> &y_sorted, Node *node)
 {
-    if (depth % 2 == 0) // X
+    if (x_sorted.getSize() == 0)
+        return;
+    Vector<PizzaShop> left_x_sorted;
+    Vector<PizzaShop> left_y_sorted;
+    Vector<PizzaShop> right_x_sorted;
+    Vector<PizzaShop> right_y_sorted;
+    Node *t;
+    int median = x_sorted.getSize() / 2;
+    if (depth % 2) // Y
     {
-        heapSort<PizzaShop>(tree, begin, end,
-                            [](PizzaShop &one, PizzaShop &other) -> bool
-                            {
-                                return one.getX() > other.getX();
-                            });
-        int median = ((end - begin) / 2) + begin;
-        Node *t = new Node(tree[median], node);
-        if (pos % 2) // left
-        {
-            node->setLeft(t);
-            node = node->getLeft();
-        }
-        else // right
-        {
-            node->setRight(t);
-            node = node->getRight();
-        }
-        // node = new Node(tree[median]);
-        if (median > begin)
-        {
-            pos = (pos * 2) + 1;
-            build(depth + 1, begin, median, node);
-            pos /= 2;
-        }
-        if (median < end - 1)
-        {
-            pos = (pos * 2) + 2;
-            build(depth + 1, median + 1, end, node);
-            pos--;
-            pos /= 2;
-        }
+        PizzaShop &median_val = y_sorted[median];
+        t = new Node(median_val);
+        split(y_sorted, left_y_sorted, right_y_sorted, median);
+        split(x_sorted, left_x_sorted, right_x_sorted,
+              [median_val](PizzaShop &val) -> int
+              {
+                  if (val.getY() > median_val.getY())return 1;
+                  if (val.getY() < median_val.getY())return -1;
+                  // since the have same Y with median:
+                  if (val.getX() > median_val.getX())return 1; // after median
+                  if (val.getX() < median_val.getX())return -1; // before median
+                  else return 0; }); // its median
     }
-    else // Y
+    else // X
     {
-        heapSort<PizzaShop>(tree, begin, end,
-                            [](PizzaShop &one, PizzaShop &other) -> bool
-                            {
-                                return one.getY() > other.getY();
-                            });
-        int median = ((end - begin) / 2) + begin;
-        Node *t = new Node(tree[median], node);
-        if (pos % 2) // left
+        PizzaShop &median_val = x_sorted[median];
+        t = new Node(median_val);
+        split(x_sorted, left_x_sorted, right_x_sorted, median);
+        split(y_sorted, left_y_sorted, right_y_sorted,
+              [median_val](PizzaShop &val) -> int
+              {
+                  if (val.getX() > median_val.getX())return 1;
+                  if (val.getX() < median_val.getX())return -1;
+                  // since the have same X with median:
+                  if (val.getY() > median_val.getY())return 1; // after median
+                  if (val.getY() < median_val.getY())return -1; // before median
+                  else return 0; }); // its median
+    }
+    if (pos % 2) // if its a right child
+    {
+        node->setLeft(t);
+        node = node->getLeft();
+    }
+    else // left child
+    {
+        node->setRight(t);
+        node = node->getRight();
+    }
+    pos = (pos * 2) + 1;
+    build(depth + 1, left_x_sorted, left_y_sorted, node);
+    pos /= 2;
+    pos = (pos * 2) + 2;
+    build(depth + 1, right_x_sorted, right_y_sorted, node);
+    pos--;
+    pos /= 2;
+}
+void KDTree::split(Vector<PizzaShop> &vec, Vector<PizzaShop> &left, Vector<PizzaShop> &right, std::function<int(PizzaShop &val)> spliter)
+{
+    for (int i = 0; i < vec.getSize(); i++)
+    {
+        switch (spliter(vec[i]))
         {
-            node->setLeft(t);
-            node = node->getLeft();
-        }
-        else // right
-        {
-            node->setRight(t);
-            node = node->getRight();
-        }
-        if (median > begin)
-        {
-            pos = (pos * 2) + 1;
-            build(depth + 1, begin, median, node);
-            pos /= 2;
-        }
-        if (median < end - 1)
-        {
-            pos = (pos * 2) + 2;
-            build(depth + 1, median + 1, end, node);
-            pos--;
-            pos /= 2;
+        case -1:
+            left.pushBack(vec[i]);
+            break;
+        case 1:
+            right.pushBack(vec[i]);
+        default: //--> 0 its median
+            break;
         }
     }
 }
+void KDTree::split(Vector<PizzaShop> &vec, Vector<PizzaShop> &left, Vector<PizzaShop> &right, int median)
+{
+    for (int i = 0; i < median; i++)
+    {
+        left.pushBack(vec[i]);
+    }
+    for (int i = median + 1; i < vec.getSize(); i++)
+    {
+        right.pushBack(vec[i]);
+    }
+}
+Node *KDTree::getRoot() { return *root; }
 Vector<PizzaShop> &KDTree::getVec()
 {
     return tree;
