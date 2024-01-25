@@ -4,7 +4,18 @@ PizzaShop::PizzaShop(int x, int y,
                      string n, bool is_m) : name(n),
                                             x_coordinate(x),
                                             y_coordinate(y),
-                                            is_main_branch(is_m)
+                                            is_main_branch(is_m),
+                                            main_branch(n),
+                                            branches(0)
+{
+}
+
+PizzaShop::PizzaShop(int x, int y,
+                     string n,string b_n) : name(n),
+                     x_coordinate(x),
+                     y_coordinate(y),
+                     main_branch(b_n),
+                     is_main_branch(false)
 {
 }
 
@@ -36,4 +47,13 @@ string PizzaShop::getName() const
 bool PizzaShop::isMainBranch() const
 {
     return is_main_branch;
+}
+
+int PizzaShop::operator[](int axis) {
+    if(axis == 0) return this->x_coordinate;
+    else if(axis == 1) return this->y_coordinate;
+}
+
+void PizzaShop::addBranch() {
+    this->branches++;
 }

@@ -205,3 +205,34 @@ void KDTree::nodePrinter(int line, int depth, Node *node, int maxline)
 }
 bool KDTree::isBalanced() {}
 int KDTree::findHeight() {}
+int KDTree::findDepth(Node *node) {
+    int depth = 0;
+    Node* tmp = node;
+    for(;tmp;depth++,tmp = tmp->getParent());
+    return depth;
+    //If depth odd then axis = x and if even then axis = y
+}
+
+Node* KDTree::findNearestNeighbor(Node* best_match, Node* point, Node *query, int depth) {
+    int axis = depth % 2;
+    Node* next_point = (point->getValue()[axis] <= point->getValue()[axis]) ? point->getLeft() : point->getRight();
+    if((!point->hasLeft() || !point->hasRight()) && next_point == nullptr) return point;
+    Node* tmp = findNearestNeighbor(best_match,next_point,query,depth + 1);
+    Node* best = distance(tmp,query) > distance(query,best_match) ? best_match : tmp;
+    if( distance(best,point) > abs(point->getValue()[axis] - query->getValue()[axis])) {
+        Node* other = (next_point == point->getLeft()) ? point->getRight() : point->getLeft();
+        if(other)
+            tmp = distance(tmp,query) > distance(query,best_match) ? best_match : tmp;
+    }
+    if(distance(tmp,query) > distance(query,best)) return best;
+    else return tmp;
+}
+
+/*******************************Functions************************************/
+
+float distance(Node* first,Node* second) {
+    if(first == nullptr || second == nullptr) return 10000000;
+    auto dis = pow((first->getValue()[1]-second->getValue()[1]),2) +
+               pow((first->getValue()[0]-second->getValue()[0]),2);
+    return sqrt(dis);
+}
