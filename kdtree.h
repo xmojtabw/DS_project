@@ -30,11 +30,10 @@ public:
     void nodePrinter(int line, int depth, Node *node, int maxline);
     bool isBalanced();
     int findHeight();
-    int findDepth(Node*);
-    Node* findNearestNeighbor(Node* best_match,Node* point,Node* query,int depth);
-    Node* getRoot();
+    int findDepth(Node *);
+    Node *findNearestNeighbor(Node *best_match, Node *point, Node *query, int depth);
 };
 
 /*******************************Functions************************************/
-float distance(Node* first,Node* second);
+float distance(Node *first, Node *second);
 #endif

@@ -228,10 +228,6 @@ Node* KDTree::findNearestNeighbor(Node* best_match, Node* point, Node *query, in
     else return tmp;
 }
 
-Node* KDTree::getRoot() {
-    return *(root);
-}
-
 /*******************************Functions************************************/
 
 float distance(Node* first,Node* second) {
