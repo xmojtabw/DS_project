@@ -24,6 +24,7 @@ public:
     int getX() const;
     int getY() const;
     string getName() const;
+    string getMainBranchName() const;
     bool isMainBranch() const;
     void addBranch();
 };

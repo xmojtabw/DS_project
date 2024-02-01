@@ -1,4 +1,5 @@
 #include "vectorT.h"
+#include <iostream>
 
 template <class T>
 Vector<T>::Vector() : capacity(3), size(0)
@@ -30,6 +31,18 @@ Vector<T>::Vector(const Vector<T> &other) : capacity(other.capacity), size(other
         ptr[i] = other.ptr[i];
     }
 }
+
+template <class T>
+Vector<T>::Vector(const initializer_list<pair<string, function<void(Vector<std::string>)>>> &values) {
+    this->capacity = 2*values.size();
+    this->ptr = new T[capacity];
+    this->size = values.size();
+//    std::cout << values.size();
+    int index = 0;
+    for(const auto &value : values) {
+        ptr[index++] = value;
+    }
+}
 template <class T>
 void Vector<T>::pushBack(T &value)
 {
@@ -52,6 +65,16 @@ template <class T>
 void Vector<T>::popBack()
 {
     size--;
+}
+
+template <class T>
+void Vector<T>::popFront() {
+    if(size > 0) {
+        for(int i = 0 ; i < size ; i++) {
+            ptr[i] = ptr[i+1];
+        }
+        size--;
+    }
 }
 
 template <class T>

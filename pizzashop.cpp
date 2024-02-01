@@ -44,6 +44,11 @@ string PizzaShop::getName() const
     return name;
 }
 
+string PizzaShop::getMainBranchName() const
+{
+    return main_branch;
+}
+
 bool PizzaShop::isMainBranch() const
 {
     return is_main_branch;
