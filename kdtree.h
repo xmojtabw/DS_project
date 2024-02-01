@@ -1,8 +1,9 @@
-#ifndef _KDTREE_H_
-#define _KDTREE_H_
+#ifndef KDTREE_H
+#define KDTREE_H
 #include <math.h>
 #include <cmath>
-#include "vectorT.h"
+// #include "vectorT.h"
+#include "heapsort.h"
 #include <functional>
 // #include "pizzashop.h"
 #include "node.h"
@@ -10,7 +11,8 @@ class KDTree
 {
 private:
     Vector<PizzaShop> tree;
-
+    Vector<PizzaShop> x_s_tree;
+    Vector<PizzaShop> y_s_tree;
     Node **root = nullptr;
     //------------//
     int pos;
@@ -28,10 +30,12 @@ public:
     void print();
     void print(int line);
     void nodePrinter(int line, int depth, Node *node, int maxline);
-    bool isBalanced();
-    int findHeight();
+    bool isBalanced(); //
+    int findHeight();  //
     int findDepth(Node *);
     Node *findNearestNeighbor(Node *best_match, Node *point, Node *query, int depth);
+    void insertToTree(PizzaShop &value);
+    void removeFromTree(PizzaShop &value);
 };
 
 /*******************************Functions************************************/

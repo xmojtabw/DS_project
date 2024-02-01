@@ -1,31 +1,33 @@
 #include "kdtree.h"
-#include "heapsort.h"
+// #include "heapsort.h"
 KDTree::KDTree() : pos(0) {}
-KDTree::KDTree(Vector<PizzaShop> &vec) : tree(vec), pos(0)
+KDTree::KDTree(Vector<PizzaShop> &vec) : tree(vec), x_s_tree(vec), y_s_tree(vec), pos(0)
 {
-    build();
-}
-void KDTree::build()
-{
-    int size = tree.getSize();
-    int median = size / 2;
-    Vector<PizzaShop> y_sorted = tree;
-    Vector<PizzaShop> x_sorted = tree;
-    heapSort<PizzaShop>(x_sorted, [](PizzaShop &one, PizzaShop &other) -> bool
+
+    heapSort<PizzaShop>(x_s_tree, [](PizzaShop &one, PizzaShop &other) -> bool
                         { 
                             if(one.getX() > other.getX())return true;
                             if(one.getX() < other.getX())return false;
                             //if the have same X sort it with y 
                             return one.getY() > other.getY(); });
-    heapSort<PizzaShop>(y_sorted, [](PizzaShop &one, PizzaShop &other) -> bool
+    heapSort<PizzaShop>(y_s_tree, [](PizzaShop &one, PizzaShop &other) -> bool
                         {                       
                             if(one.getY() > other.getY())return true;
                             if(one.getY() < other.getY())return false;
                             //if the have same X sort it with y 
                             return one.getX() > other.getX(); });
 
+    build();
+}
+void KDTree::build()
+{
+    int size = x_s_tree.getSize();
+    int median = size / 2;
+
     // sorting both vectors with x-axis and y-axis
-    PizzaShop &median_val = x_sorted[median];
+    PizzaShop &median_val = x_s_tree[median];
+    if (root)
+        delete root;
     root = new Node *;
     *root = new Node(median_val);
 
@@ -34,9 +36,9 @@ void KDTree::build()
     Vector<PizzaShop> right_x_sorted;
     Vector<PizzaShop> right_y_sorted;
 
-    split(x_sorted, left_x_sorted, right_x_sorted, median);
+    split(x_s_tree, left_x_sorted, right_x_sorted, median);
     // bool lambd = [tree]()
-    split(y_sorted, left_y_sorted, right_y_sorted,
+    split(y_s_tree, left_y_sorted, right_y_sorted,
           [median_val](PizzaShop &val) -> int
           {
               if (val.getX() > median_val.getX())return 1;
@@ -205,34 +207,70 @@ void KDTree::nodePrinter(int line, int depth, Node *node, int maxline)
 }
 bool KDTree::isBalanced() {}
 int KDTree::findHeight() {}
-int KDTree::findDepth(Node *node) {
+int KDTree::findDepth(Node *node)
+{
     int depth = 0;
-    Node* tmp = node;
-    for(;tmp;depth++,tmp = tmp->getParent());
+    Node *tmp = node;
+    for (; tmp; depth++, tmp = tmp->getParent())
+        ;
     return depth;
-    //If depth odd then axis = x and if even then axis = y
+    // If depth odd then axis = x and if even then axis = y
 }
 
-Node* KDTree::findNearestNeighbor(Node* best_match, Node* point, Node *query, int depth) {
+Node *KDTree::findNearestNeighbor(Node *best_match, Node *point, Node *query, int depth)
+{
     int axis = depth % 2;
-    Node* next_point = (point->getValue()[axis] <= point->getValue()[axis]) ? point->getLeft() : point->getRight();
-    if((!point->hasLeft() || !point->hasRight()) && next_point == nullptr) return point;
-    Node* tmp = findNearestNeighbor(best_match,next_point,query,depth + 1);
-    Node* best = distance(tmp,query) > distance(query,best_match) ? best_match : tmp;
-    if( distance(best,point) > abs(point->getValue()[axis] - query->getValue()[axis])) {
-        Node* other = (next_point == point->getLeft()) ? point->getRight() : point->getLeft();
-        if(other)
-            tmp = distance(tmp,query) > distance(query,best_match) ? best_match : tmp;
+    Node *next_point = (point->getValue()[axis] <= point->getValue()[axis]) ? point->getLeft() : point->getRight();
+    if ((!point->hasLeft() || !point->hasRight()) && next_point == nullptr)
+        return point;
+    Node *tmp = findNearestNeighbor(best_match, next_point, query, depth + 1);
+    Node *best = distance(tmp, query) > distance(query, best_match) ? best_match : tmp;
+    if (distance(best, point) > abs(point->getValue()[axis] - query->getValue()[axis]))
+    {
+        Node *other = (next_point == point->getLeft()) ? point->getRight() : point->getLeft();
+        if (other)
+            tmp = distance(tmp, query) > distance(query, best_match) ? best_match : tmp;
     }
-    if(distance(tmp,query) > distance(query,best)) return best;
-    else return tmp;
+    if (distance(tmp, query) > distance(query, best))
+        return best;
+    else
+        return tmp;
 }
-
+void KDTree::insertToTree(PizzaShop &value)
+{
+    x_s_tree.insert(value, [](PizzaShop &eachone, PizzaShop &val) -> bool
+                    {
+        if(eachone.getX() < val.getX())return true;
+        else if(eachone.getX() >val.getX())return false;
+        else
+        {
+            if(eachone.getY() < val.getY()) return true;
+            else return false;
+        } });
+    y_s_tree.insert(value, [](PizzaShop &eachone, PizzaShop &val) -> bool
+                    {
+        if(eachone.getY() < val.getY())return true;
+        else if(eachone.getY() >val.getY())return false;
+        else
+        {
+            if(eachone.getX() < val.getX()) return true;
+            else return false;
+        } });
+    build();
+}
+void KDTree::removeFromTree(PizzaShop &value)
+{
+    x_s_tree.erase(value);
+    y_s_tree.erase(value);
+    build();
+}
 /*******************************Functions************************************/
 
-float distance(Node* first,Node* second) {
-    if(first == nullptr || second == nullptr) return 10000000;
-    auto dis = pow((first->getValue()[1]-second->getValue()[1]),2) +
-               pow((first->getValue()[0]-second->getValue()[0]),2);
+float distance(Node *first, Node *second)
+{
+    if (first == nullptr || second == nullptr)
+        return 10000000;
+    auto dis = pow((first->getValue()[1] - second->getValue()[1]), 2) +
+               pow((first->getValue()[0] - second->getValue()[0]), 2);
     return sqrt(dis);
 }

@@ -18,6 +18,10 @@ public:
     void popBack();
     int getSize() const;
     T &operator[](int index);
+    void erase(int index);
+    void erase(T &value);
+    void insert(T &value, int index);
+    void insert(T &value, bool (*cond)(T &eachone, T &value));
 };
 #include "vectorT.cpp" //im here because of link error
 #endif

@@ -1,6 +1,7 @@
 #include <iostream>
 // #include "vectorT.h"
 // #include "pizzashop.h"
+// #include "heapsort.h"
 #include "geometry.h"
 // #include "heapsort.h"
 // #include "kdtree.h"
@@ -64,6 +65,26 @@ int main()
     Node *best_res = kd.findNearestNeighbor(nullptr, kd.getRoot(), point, 0);
     cout << "out put is " << endl;
     kd.print(4);
+
+    cout << "---" << endl;
+    PizzaShop ps10(90, 90, "x");
+    PizzaShop ps11(92, 92, "y");
+    PizzaShop ps12(93, 93, "z");
+    PizzaShop ps13(96, 96, "u");
+    PizzaShop ps14(98, 98, "w");
+    kd.insertToTree(ps10);
+    kd.insertToTree(ps11);
+    kd.insertToTree(ps12);
+    kd.insertToTree(ps13);
+    kd.insertToTree(ps14);
+    kd.removeFromTree(ps14);
+    kd.removeFromTree(ps1);
+    kd.removeFromTree(ps13);
+    kd.print(4);
+    // Vector<int> aa;
+    // int dd = 1;
+    // aa.pushBack(dd);
+    // heapSort<int>(aa);this was okay
 
     while (1)
     {

@@ -1,5 +1,5 @@
-#ifndef _NEIGHBORHOOD_H_
-#define _NEIGHBORHOOD_H_
+#ifndef NEIGHBERHOOD_H
+#define NEIGHBERHOOD_H
 #include <iostream>
 #include "kdtree.h"
 #include "vectorT.h"
