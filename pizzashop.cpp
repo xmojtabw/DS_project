@@ -11,11 +11,11 @@ PizzaShop::PizzaShop(int x, int y,
 }
 
 PizzaShop::PizzaShop(int x, int y,
-                     string n,string b_n) : name(n),
-                     x_coordinate(x),
-                     y_coordinate(y),
-                     main_branch(b_n),
-                     is_main_branch(false)
+                     string n, string b_n) : name(n),
+                                             x_coordinate(x),
+                                             y_coordinate(y),
+                                             main_branch(b_n),
+                                             is_main_branch(false)
 {
 }
 
@@ -49,11 +49,47 @@ bool PizzaShop::isMainBranch() const
     return is_main_branch;
 }
 
-int PizzaShop::operator[](int axis) {
-    if(axis == 0) return this->x_coordinate;
-    else if(axis == 1) return this->y_coordinate;
+int PizzaShop::operator[](int axis)
+{
+    if (axis == 0)
+        return this->x_coordinate;
+    else if (axis == 1)
+        return this->y_coordinate;
 }
 
-void PizzaShop::addBranch() {
+void PizzaShop::addBranch()
+{
     this->branches++;
+}
+
+bool PizzaShop::compareByX(PizzaShop &other)
+{
+    if (this->x_coordinate > other.x_coordinate)
+    {
+        return true;
+    }
+    else if (this->x_coordinate < other.x_coordinate)
+    {
+        return false;
+    }
+    else // same X
+    {
+        return this->y_coordinate > other.y_coordinate;
+    }
+}
+
+bool PizzaShop::compareByY(PizzaShop &other)
+{
+    if (this->y_coordinate > other.y_coordinate)
+    {
+        return true;
+    }
+    else if (this->y_coordinate < other.y_coordinate)
+    {
+        return false;
+    }
+    else // same X
+    {
+        return this->x_coordinate > other.x_coordinate;
+    }
 }

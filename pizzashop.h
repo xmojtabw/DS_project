@@ -15,7 +15,7 @@ private:
 public:
     PizzaShop() = default;
     PizzaShop(int x, int y, string n, bool is_m = true);
-    PizzaShop(int x, int y, string n,string b_n);//For sub-branch.
+    PizzaShop(int x, int y, string n, string b_n); // For sub-branch.
     PizzaShop(const PizzaShop &other) = default;
     PizzaShop &operator=(const PizzaShop &other) = default;
     bool operator==(const PizzaShop &other) const;
@@ -26,5 +26,8 @@ public:
     string getName() const;
     bool isMainBranch() const;
     void addBranch();
+
+    bool compareByX(PizzaShop &other);
+    bool compareByY(PizzaShop &other);
 };
 #endif

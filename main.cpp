@@ -8,11 +8,11 @@
 #include "neighberhood.h"
 
 // if debug :
-// #include "geometry.cpp"
-// #include "pizzashop.cpp"
-// #include "kdtree.cpp"
-// #include "node.cpp"
-// #include "neighborhood.cpp"
+#include "geometry.cpp"
+#include "pizzashop.cpp"
+#include "kdtree.cpp"
+#include "node.cpp"
+#include "neighborhood.cpp"
 
 using namespace std;
 int main()
@@ -60,26 +60,38 @@ int main()
     // {
     //     cout << another[i].getX() << " " << another[i].getY() << " " << another[i].getName() << endl;
     // }
-    PizzaShop p(3, 5, "a");
+    PizzaShop p(30, 7, "a");
     Node *point = new Node(p);
-    Node *best_res = kd.findNearestNeighbor(nullptr, kd.getRoot(), point, 0);
     cout << "out put is " << endl;
     kd.print(4);
 
     cout << "---" << endl;
-    PizzaShop ps10(90, 90, "x");
+    PizzaShop ps10(-90, -90, "x");
     PizzaShop ps11(92, 92, "y");
     PizzaShop ps12(93, 93, "z");
     PizzaShop ps13(96, 96, "u");
     PizzaShop ps14(98, 98, "w");
     kd.insertToTree(ps10);
+    kd.print(4);
+    cout << "---" << endl;
     kd.insertToTree(ps11);
+    kd.print(4);
+    cout << "---" << endl;
     kd.insertToTree(ps12);
+    kd.print(4);
+    cout << "---" << endl;
     kd.insertToTree(ps13);
+    kd.print(4);
+    cout << "---" << endl;
     kd.insertToTree(ps14);
-    kd.removeFromTree(ps14);
-    kd.removeFromTree(ps1);
-    kd.removeFromTree(ps13);
+    kd.print(4);
+    cout << "---" << endl;
+    Node *best_res = kd.findNearestNeighbor(nullptr, kd.getRoot(), point, 0);
+    kd.removeFromTree(best_res);
+    // kd.print($);
+    //   kd.removeFromTree(ps14);
+    //   kd.removeFromTree(ps1);
+    //   kd.removeFromTree(ps13);
     kd.print(4);
     // Vector<int> aa;
     // int dd = 1;

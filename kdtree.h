@@ -31,11 +31,17 @@ public:
     void print(int line);
     void nodePrinter(int line, int depth, Node *node, int maxline);
     bool isBalanced(); //
-    int findHeight();  //
+
+    int setHeight(Node *node);
+    int insertToTree(Node *node, PizzaShop &value, int depth);
+
     int findDepth(Node *);
     Node *findNearestNeighbor(Node *best_match, Node *point, Node *query, int depth);
     void insertToTree(PizzaShop &value);
-    void removeFromTree(PizzaShop &value);
+    void removeFromTree(Node *node);
+    int removeRec(Node *node);
+    Node *findmin(Node *subtree, int depth, int axis);
+    int getHeight(Node *node);
 };
 
 /*******************************Functions************************************/

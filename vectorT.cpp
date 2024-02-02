@@ -153,15 +153,15 @@ void Vector<T>::insert(T &value, bool (*cond)(T &eachone, T &value))
     else
     {
         int i = size - 1;
-        for (; i > 0; i--)
+        for (; i >= 0; i--)
         {
             if (cond(ptr[i], value)) // when value is bigger than ptr[i]
             {
-                ptr[i + 1] = value;
                 break;
             }
             ptr[i + 1] = ptr[i];
         }
+        ptr[i + 1] = value;
         size++;
     }
 }
