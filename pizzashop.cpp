@@ -24,6 +24,16 @@ bool PizzaShop::operator==(const PizzaShop &other) const
     return (this->hasSamePoint(other) && this->name == other.name);
 }
 
+bool PizzaShop::operator<(const PizzaShop &other) const {
+    return (this->branches) < other.branches;
+}
+
+std::ostream& operator<<(std::ostream& os, const PizzaShop& obj) {
+    os << obj.name << " : " << obj.x_coordinate << " , " << obj.y_coordinate;
+    return os;
+}
+
+
 bool PizzaShop::hasSamePoint(const PizzaShop &other) const
 {
     return (x_coordinate == other.x_coordinate && y_coordinate == other.y_coordinate);
@@ -42,6 +52,15 @@ int PizzaShop::getY() const
 string PizzaShop::getName() const
 {
     return name;
+}
+
+string PizzaShop::getMainBranchName() const
+{
+    return main_branch;
+}
+
+const int PizzaShop::branches_number() const{
+    return this->branches;
 }
 
 bool PizzaShop::isMainBranch() const

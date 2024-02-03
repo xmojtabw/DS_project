@@ -67,5 +67,5 @@ template <typename T>
 void heapSort(Vector<T> &tree) // sort entire tree if "<" is defined
 {
     heapSort<T>(tree, 0, tree.getSize(), [](T &one, T &other) -> bool
-                { return (one < other); });
+    { return (one < other); });
 }
