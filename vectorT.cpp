@@ -1,4 +1,5 @@
 #include "vectorT.h"
+#include <iostream>
 
 template <class T>
 Vector<T>::Vector() : capacity(3), size(0)
@@ -22,12 +23,24 @@ Vector<T>::Vector(T *p, int _size) : capacity(2 * size), size(_size)
     }
 }
 template <class T>
-Vector<T>::Vector(const Vector<T> &other) : capacity(other.capacity), size(other.size)
+Vector<T>::Vector(const Vector<T>& other) : capacity(other.capacity), size(other.size)
 {
     ptr = new T[capacity];
     for (int i = 0; i < size; i++)
     {
         ptr[i] = other.ptr[i];
+    }
+}
+
+template <class T>
+Vector<T>::Vector(const initializer_list<pair<string, function<void(Vector<std::string>)>>> &values) {
+    this->capacity = 2*values.size();
+    this->ptr = new T[capacity];
+    this->size = values.size();
+//    std::cout << values.size();
+    int index = 0;
+    for(const auto &value : values) {
+        ptr[index++] = value;
     }
 }
 template <class T>
@@ -55,6 +68,16 @@ void Vector<T>::popBack()
 }
 
 template <class T>
+void Vector<T>::popFront() {
+    if(size > 0) {
+        for(int i = 0 ; i < size ; i++) {
+            ptr[i] = ptr[i+1];
+        }
+        size--;
+    }
+}
+
+template <class T>
 int Vector<T>::getSize() const
 {
     return size;
@@ -71,4 +94,14 @@ T &Vector<T>::operator[](int index)
     {
         throw std::out_of_range("wrong index");
     }
+}
+
+template <class T>
+T* Vector<T>::begin() {
+    return ptr;
+}
+
+template <class T>
+T* Vector<T>::end() {
+    return ptr + size;
 }
