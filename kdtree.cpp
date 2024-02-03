@@ -145,29 +145,39 @@ Vector<PizzaShop> &KDTree::getVec()
 }
 void KDTree::print()
 {
-    int height = log2(tree.getSize());
-    int x = 0;
-    for (int i = height; i >= 0; i--)
+    if(x_s_tree.getSize()==0)
     {
-        for (int j = 1; j < pow(2, i); j++)
-        {
-            cout << " ";
-        }
-        for (int j = 0; j < pow(2, height - i); j++)
-        {
-            if (x == tree.getSize())
-            {
-                return;
-            }
-            cout << tree[x].getName();
-            x++;
-            for (int k = 1; k < pow(2, i + 1); k++)
-            {
-                cout << " ";
-            }
-        }
-        cout << endl;
+        return;
     }
+    int height = (*root)->getRightH() ;//find max height
+    if(height < (*root)->getLeftH())
+    {
+        height = (*root)->getLeftH();
+    }
+    height++;
+    print(height);
+//    int x = 0;
+//    for (int i = height; i >= 0; i--)
+//    {
+//        for (int j = 1; j < pow(2, i); j++)
+//        {
+//            cout << " ";
+//        }
+//        for (int j = 0; j < pow(2, height - i); j++)
+//        {
+//            if (x == tree.getSize())
+//            {
+//                return;
+//            }
+//            cout << tree[x].getName();
+//            x++;
+//            for (int k = 1; k < pow(2, i + 1); k++)
+//            {
+//                cout << " ";
+//            }
+//        }
+//        cout << endl;
+//    }
 }
 void KDTree::print(int line)
 {
@@ -206,7 +216,7 @@ void KDTree::nodePrinter(int line, int depth, Node *node, int maxline)
         nodePrinter(line, depth + 1, node->getRight(), maxline);
     }
 }
-bool KDTree::isBalanced() {}
+
 int KDTree::setHeight(Node *node)
 { // O(n)
     if (node->isLeaf())
@@ -240,24 +250,37 @@ int KDTree::findDepth(Node *node)
 Node *KDTree::findNearestNeighbor(Node *best_match, Node *point, Node *query, int depth)
 {
     int axis = depth % 2;
-    Node *next_point = (point->getValue()[axis] <= point->getValue()[axis]) ? point->getLeft() : point->getRight();
-    if ((!point->hasLeft() || !point->hasRight()) && next_point == nullptr)
+    Node *next_point = (point->getValue()[axis] >= query->getValue()[axis]) ? point->getLeft() : point->getRight();
+    if ((!point->hasLeft() && next_point == nullptr)) {
+        next_point = point->getRight();
+    }
+    if((!point->hasRight() && next_point == nullptr)) {
+        next_point = point->getLeft();
+    }
+    if((!point->hasRight() && !point->hasLeft()) && next_point == nullptr)
         return point;
     Node *tmp = findNearestNeighbor(best_match, next_point, query, depth + 1);
     Node *best = distance(tmp, query) > distance(query, best_match) ? best_match : tmp;
     if (distance(best, point) > abs(point->getValue()[axis] - query->getValue()[axis]))
     {
         Node *other = (next_point == point->getLeft()) ? point->getRight() : point->getLeft();
+        tmp = distance(query, point) > distance(query, best) ? best : point;
         if (other)
-            tmp = distance(tmp, query) > distance(query, best_match) ? best_match : tmp;
+            tmp = distance(tmp, query) > distance(query, other) ? other : tmp;
     }
     if (distance(tmp, query) > distance(query, best))
         return best;
     else
         return tmp;
 }
+
 void KDTree::insertToTree(PizzaShop &value)
 {
+    if(root== nullptr || x_s_tree.getSize()==0)
+    {
+        root = new Node*;
+        *root = nullptr;
+    }
     int res = insertToTree(*root, value, 0);
     // adding in sorted vectors
     x_s_tree.insert(value, [](PizzaShop &eachone, PizzaShop &val) -> bool
@@ -290,6 +313,8 @@ int KDTree::insertToTree(Node *node, PizzaShop &value, int depth)
     {
         // adding to root
         node = new Node(value);
+        *root=node;
+        return 1;
     }
     int h = 0;
     if (depth % 2) // Y
@@ -484,6 +509,10 @@ int KDTree::insertToTree(Node *node, PizzaShop &value, int depth)
 }
 void KDTree::removeFromTree(Node *node)
 {
+    if(x_s_tree.getSize()==0)
+    {
+        return;
+    }
     x_s_tree.erase(node->getValue());
     y_s_tree.erase(node->getValue());
     int res = removeRec(node);
@@ -496,7 +525,7 @@ int KDTree::removeRec(Node *node)
     {
         Node *p = node->getParent();
         Node *n = node;
-        node->delLeaf();
+       // node->delLeaf();
         int max_h = 0;
         while (p != nullptr)
         {
@@ -526,12 +555,14 @@ int KDTree::removeRec(Node *node)
             n = p;
             p = p->getParent();
         }
-        return 1; // no unbalance
+        node->delLeaf();
+        return 1; // balance
     }
     else if (node->hasRight())
     {
-        int axis = getHeight(node) % 2;
-        Node *min = findmin(node->getRight(), 0, axis);
+        int h= getHeight(node);
+        int axis = h % 2;
+        Node *min = findmin(node->getRight(),h+1, axis);
         node->copyNode(min);
         return removeRec(min);
     }
@@ -544,6 +575,9 @@ int KDTree::removeRec(Node *node)
 }
 Node *KDTree::findmin(Node *subtree, int depth, int axis)
 {
+    if(subtree->isLeaf()){
+        return subtree;
+    }
     if (depth % 2) // Y
     {
         if (axis == 0) // X
@@ -663,7 +697,6 @@ int KDTree::getHeight(Node *node)
         h++;
     }
 }
-
 /*******************************Functions************************************/
 
 float distance(Node *first, Node *second)

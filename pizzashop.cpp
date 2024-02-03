@@ -6,7 +6,8 @@ PizzaShop::PizzaShop(int x, int y,
                                             y_coordinate(y),
                                             is_main_branch(is_m),
                                             main_branch(n),
-                                            branches(0)
+                                            branches(0),
+                                            is_find(true)
 {
 }
 
@@ -15,14 +16,29 @@ PizzaShop::PizzaShop(int x, int y,
                                              x_coordinate(x),
                                              y_coordinate(y),
                                              main_branch(b_n),
-                                             is_main_branch(false)
+                                             is_main_branch(false),
+                                             is_find(true)
 {
+}
+
+PizzaShop::PizzaShop(bool find) {
+    this->is_find = find;
 }
 
 bool PizzaShop::operator==(const PizzaShop &other) const
 {
     return (this->hasSamePoint(other) && this->name == other.name);
 }
+
+bool PizzaShop::operator<(const PizzaShop &other) const {
+    return (this->branches) < other.branches;
+}
+
+std::ostream& operator<<(std::ostream& os, const PizzaShop& obj) {
+    os << obj.name << " : " << obj.x_coordinate << " , " << obj.y_coordinate;
+    return os;
+}
+
 
 bool PizzaShop::hasSamePoint(const PizzaShop &other) const
 {
@@ -44,6 +60,19 @@ string PizzaShop::getName() const
     return name;
 }
 
+string PizzaShop::getMainBranchName() const
+{
+    return main_branch;
+}
+
+bool PizzaShop::getFind() {
+    return is_find;
+}
+
+const int PizzaShop::branches_number() const{
+    return this->branches;
+}
+
 bool PizzaShop::isMainBranch() const
 {
     return is_main_branch;
@@ -60,6 +89,10 @@ int PizzaShop::operator[](int axis)
 void PizzaShop::addBranch()
 {
     this->branches++;
+}
+
+void PizzaShop::reduceBranch() {
+    this->branches--;
 }
 
 bool PizzaShop::compareByX(PizzaShop &other)
