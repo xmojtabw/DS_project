@@ -54,15 +54,20 @@ T* Hash<T>::search(int key) {
 
 template<>
 PizzaShop Hash<PizzaShop>::search(PizzaShop key) {
-    int _key = this->hash_string(key.getMainBranchName());
+    int _key = this->hash_string(key.getName());
     int index = _key % this->hash_table_size;
-    return this->values[index].search(_key)->get_value();
+    PizzaShop tmp_psb(false);
+    node_t<PizzaShop>* result = this->values[index].search(_key, key);
+    if(result)
+        return result->get_value();
+    return tmp_psb;
 }
 
 template<>
 PizzaShop Hash<PizzaShop>::search(std::string key) {
     int _key = this->hash_string(key);
     int index = _key % this->hash_table_size;
+
     return this->values[index].search(_key)->get_value();
 }
 

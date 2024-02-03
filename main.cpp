@@ -64,25 +64,70 @@ public:
     static void addPizzaShop(Vector<string> inputs)
     { // Input pattern : X_coordinate Y_coordinate Name
         int x, y;
+        bool exist = false;
+        bool name_exist = false;
         x = stoi(inputs[0]);
         y = stoi(inputs[1]);
         string name = inputs[2];
         PizzaShop psb(x, y, name);
-        names.insert(psb);
-        myvec.pushBack(psb);
-        main_brs.pushBack(psb);
-    }
+        Node* shop_search = new Node(psb);
+        PizzaShop name_search_result = names.search(psb);
+        Node* tmp =nullptr;
+//        kd.insertToTree(psb);
+
+        if(kd.getVec().getSize())
+            tmp = kd.findNearestNeighbor(nullptr,kd.getRoot(),shop_search,0);
+        if(tmp) {
+            exist = tmp->getValue().hasSamePoint(psb);
+        }
+        if(exist) {
+            cerr << "Pizza shop with this coordinates has exist!" << endl;
+        }
+        else {
+            if (name_search_result.getFind()) {
+                cerr << "Pizza shop with this name has exist already!" << endl;
+            } else {
+                kd.insertToTree(psb);
+                names.insert(psb);
+                myvec.pushBack(psb);
+                main_brs.pushBack(psb);
+            }
+        }
+}
 
     static void addBranch(Vector<string> inputs)
     {
         int x, y;
+        bool exist = false;
+        bool name_exist = false;
         x = stoi(inputs[0]);
         y = stoi(inputs[1]);
         string name = inputs[2];
         string main_br = inputs[3];
         PizzaShop psb(x, y, name, main_br);
-        myvec.pushBack(psb);
-        names.insert(psb);
+        Node* shop_search = new Node(psb);
+        PizzaShop name_search_result = names.search(psb);
+        Node* tmp =nullptr;
+//        kd.insertToTree(psb);
+
+        if(kd.getVec().getSize())
+            tmp = kd.findNearestNeighbor(nullptr,kd.getRoot(),shop_search,0);
+        if(tmp) {
+            exist = tmp->getValue().hasSamePoint(psb);
+        }
+        if(exist) {
+            cerr << "Pizza shop with this coordinates has exist!" << endl;
+        }
+        else {
+            if (name_search_result.getFind()) {
+                cerr << "Pizza shop with this name has exist already!" << endl;
+            } else {
+                kd.insertToTree(psb);
+                names.insert(psb);
+                myvec.pushBack(psb);
+                main_brs.pushBack(psb);
+            }
+        }
         for (auto &brs : main_brs)
         {
             if (main_br == brs.getName())
@@ -96,6 +141,31 @@ public:
     static void deleteBranch(Vector<string> inputs)
     {
         // Delete a branch of PizzaShop with x,y coordinates and name.
+        if(kd.getVec().getSize() == 0) {
+            cout << "KDTree is empty!" << endl;
+            return;
+        }
+        int x,y;
+        x = stoi(inputs[0]);
+        y = stoi(inputs[1]);
+        PizzaShop tmp(x,y,"tmp", false);
+        Node* query = new Node(tmp);
+        Node* find = kd.findNearestNeighbor(nullptr,kd.getRoot(),query,0);
+        if(find->getValue().hasSamePoint(tmp)) {
+            if(find->getValue().isMainBranch())
+                cout << "Cannot remove this node!" << endl;
+            else{
+                for(auto &shop : main_brs ) {
+                    if(shop.getName() == find->getValue().getMainBranchName())
+                        shop.reduceBranch();
+                }
+                kd.removeFromTree(find);
+                myvec.erase(find->getValue());
+            }
+        }
+        else {
+            cout << "This point doesn't exist!" << endl;
+        }
     }
 
     static void pizzaShopsNeighberhood(Vector<string> inputs)
@@ -180,10 +250,15 @@ public:
     static void undoCommand(Vector<string> inputs)
     {
     }
+    static void print(Vector<string>inputs)
+    {
+        kd.print();
+    }
 };
 
 Vector<pair<string, function<void(Vector<string> inputs)>>> Commands::command_vector =
     {
+        {"print",Commands::print},
         {"Add-N", Commands::addNeighberhood},
         {"Add-P", Commands::addPizzaShop},
         {"Add-Br", Commands::addBranch},
@@ -194,6 +269,7 @@ Vector<pair<string, function<void(Vector<string> inputs)>>> Commands::command_ve
         {"Near-Br", Commands::findNearestBranch},
         {"Avail-P", Commands::shopsInCircle},
         {"Most-Brs", Commands::shopWithMostBranches},
+
         {"Undo", Commands::undoCommand}};
 
 int main()

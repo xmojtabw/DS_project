@@ -218,6 +218,18 @@ node_t<PizzaShop>* Linkedlist<PizzaShop>::search(int _key) {
 
 
 template<>
+node_t<PizzaShop>* Linkedlist<PizzaShop>::search(int _key,PizzaShop val) {
+    node_t<PizzaShop>* tmp = this->first;
+    while(tmp) {
+        if(tmp->key == _key && tmp->get_value() == val)
+            break;
+        tmp = tmp->next;
+    }
+    return tmp;
+}
+
+
+template<>
 node_t<Vector<node_t<KDTree>>>* Linkedlist<Vector<node_t<KDTree>>>::search(int _key) {
     node_t<Vector<node_t<KDTree>>>* tmp = this->first;
     while(tmp && tmp->value.getSize()) {

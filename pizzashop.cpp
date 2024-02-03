@@ -6,7 +6,8 @@ PizzaShop::PizzaShop(int x, int y,
                                             y_coordinate(y),
                                             is_main_branch(is_m),
                                             main_branch(n),
-                                            branches(0)
+                                            branches(0),
+                                            is_find(true)
 {
 }
 
@@ -15,8 +16,13 @@ PizzaShop::PizzaShop(int x, int y,
                                              x_coordinate(x),
                                              y_coordinate(y),
                                              main_branch(b_n),
-                                             is_main_branch(false)
+                                             is_main_branch(false),
+                                             is_find(true)
 {
+}
+
+PizzaShop::PizzaShop(bool find) {
+    this->is_find = find;
 }
 
 bool PizzaShop::operator==(const PizzaShop &other) const
@@ -59,6 +65,10 @@ string PizzaShop::getMainBranchName() const
     return main_branch;
 }
 
+bool PizzaShop::getFind() {
+    return is_find;
+}
+
 const int PizzaShop::branches_number() const{
     return this->branches;
 }
@@ -79,6 +89,10 @@ int PizzaShop::operator[](int axis)
 void PizzaShop::addBranch()
 {
     this->branches++;
+}
+
+void PizzaShop::reduceBranch() {
+    this->branches--;
 }
 
 bool PizzaShop::compareByX(PizzaShop &other)

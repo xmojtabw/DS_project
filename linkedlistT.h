@@ -34,6 +34,7 @@ public:
     Linkedlist(const Linkedlist<T> &other);
     void push_back(int key,T value);
     node_t<T>* search(int _key);
+    node_t<T>* search(int _key,T val);
     node_t<T>* pop_anywhere(int _key);
     node_t<T>* get_first() const;
 };

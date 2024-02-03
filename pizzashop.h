@@ -10,12 +10,14 @@ private:
     int x_coordinate;
     int y_coordinate;
     bool is_main_branch;
+    bool is_find;
     int branches;
 
 public:
     PizzaShop() = default;
     PizzaShop(int x, int y, string n, bool is_m = true);
     PizzaShop(int x, int y, string n, string b_n); // For sub-branch.
+    PizzaShop(bool find);
     PizzaShop(const PizzaShop &other) = default;
     PizzaShop &operator=(const PizzaShop &other) = default;
     bool operator==(const PizzaShop &other) const;
@@ -27,9 +29,11 @@ public:
     int getY() const;
     string getName() const;
     string getMainBranchName() const;
+    bool getFind();
     const int branches_number() const;
     bool isMainBranch() const;
     void addBranch();
+    void reduceBranch();
 
     bool compareByX(PizzaShop &other);
     bool compareByY(PizzaShop &other);

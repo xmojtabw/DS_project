@@ -69,7 +69,7 @@ void Vector<T>::popBack()
 template <class T>
 void Vector<T>::popFront() {
     if(size > 0) {
-        for(int i = 0 ; i < size ; i++) {
+        for(int i = 0 ; i < size - 1 ; i++) {
             ptr[i] = ptr[i+1];
         }
         size--;
