@@ -2,7 +2,8 @@
 #define _KDTREE_H_
 #include <math.h>
 #include <cmath>
-#include "vectorT.h"
+//#include "vectorT.h"
+#include "heapsort.h"
 #include <functional>
 // #include "pizzashop.h"
 #include "node.h"

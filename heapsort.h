@@ -1,8 +1,7 @@
-#ifndef _HEAPSORT_H_
-#define _HEAPSORT_H_
-#include "pizzashop.h"
-
-int findStartIndex(int size);
+#ifndef HEAPSORT_H
+#define HEAPSORT_H
+// #include "pizzashop.h"
+#include "vectorT.h"
 template <typename T>
 void heapfy(Vector<T> &tree, bool (*compare)(T &one, T &other), int index, int size, int begin);
 template <typename T>

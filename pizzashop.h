@@ -19,12 +19,15 @@ public:
     PizzaShop(const PizzaShop &other) = default;
     PizzaShop &operator=(const PizzaShop &other) = default;
     bool operator==(const PizzaShop &other) const;
+    bool operator<(const PizzaShop &other) const;
+    friend std::ostream& operator<<(std::ostream& os, const PizzaShop& obj);
     int operator[](int axis);
     bool hasSamePoint(const PizzaShop &other) const;
     int getX() const;
     int getY() const;
     string getName() const;
     string getMainBranchName() const;
+    const int branches_number() const;
     bool isMainBranch() const;
     void addBranch();
 };

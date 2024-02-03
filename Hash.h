@@ -1,6 +1,5 @@
-#ifndef DS_PROJECT_HASH_H
-#define DS_PROJECT_HASH_H
-#include "kdtree.h"
+#ifndef _HASH_H_
+#define _HASH_H_
 #include "vectorT.h"
 #include "linkedlistT.h"
 
@@ -12,10 +11,15 @@ private:
     int hash_table_size;
     int multiple_hashing(int key,double coef = 0.6180339887);
 public:
+    size_t hash_string(const std::string& str);
     Hash();
     void insert(int key,T value);
+    void insert(T value);
     T* search(int key);
-
+    T search(T key);
+    T search(std::string key);
+    T search1(int key);
+    Linkedlist<T> searchForList(string key);
 };
 
 

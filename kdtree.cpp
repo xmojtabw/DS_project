@@ -221,8 +221,9 @@ Node* KDTree::findNearestNeighbor(Node* best_match, Node* point, Node *query, in
     Node* best = distance(tmp,query) > distance(query,best_match) ? best_match : tmp;
     if( distance(best,point) > abs(point->getValue()[axis] - query->getValue()[axis])) {
         Node* other = (next_point == point->getLeft()) ? point->getRight() : point->getLeft();
+        tmp = distance(query,point) > distance(query,best) ? best : point;
         if(other)
-            tmp = distance(tmp,query) > distance(query,best_match) ? best_match : tmp;
+            tmp = distance(tmp,query) > distance(query,other) ? other : tmp;
     }
     if(distance(tmp,query) > distance(query,best)) return best;
     else return tmp;

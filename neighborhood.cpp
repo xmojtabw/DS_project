@@ -75,3 +75,6 @@ bool Neighberhood::isInXRange(Node *node)
     int x = node->getValue().getX();
     return (x <= max_x && x >= min_x);
 }
+string Neighberhood::get_name() const {
+    return name;
+}

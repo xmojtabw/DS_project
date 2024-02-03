@@ -23,7 +23,7 @@ Vector<T>::Vector(T *p, int _size) : capacity(2 * size), size(_size)
     }
 }
 template <class T>
-Vector<T>::Vector(const Vector<T> &other) : capacity(other.capacity), size(other.size)
+Vector<T>::Vector(const Vector<T>& other) : capacity(other.capacity), size(other.size)
 {
     ptr = new T[capacity];
     for (int i = 0; i < size; i++)
@@ -94,4 +94,14 @@ T &Vector<T>::operator[](int index)
     {
         throw std::out_of_range("wrong index");
     }
+}
+
+template <class T>
+T* Vector<T>::begin() {
+    return ptr;
+}
+
+template <class T>
+T* Vector<T>::end() {
+    return ptr + size;
 }
