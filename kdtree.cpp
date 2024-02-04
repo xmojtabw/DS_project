@@ -188,10 +188,18 @@ void KDTree::nodePrinter(int line, int depth, Node *node, int maxline)
     }
     else
     {
-        // if (node->hasLeft())
-        nodePrinter(line, depth + 1, node->getLeft(), maxline);
-        // if (node->hasRight())
-        nodePrinter(line, depth + 1, node->getRight(), maxline);
+        if (node == nullptr)
+        {
+            nodePrinter(line, depth + 1, nullptr, maxline);
+            nodePrinter(line, depth + 1, nullptr, maxline);
+        }
+        else
+        {
+            // if (node->hasLeft())
+            nodePrinter(line, depth + 1, node->getLeft(), maxline);
+            // if (node->hasRight())
+            nodePrinter(line, depth + 1, node->getRight(), maxline);
+        }
     }
 }
 
