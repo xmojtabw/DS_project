@@ -145,39 +145,17 @@ Vector<PizzaShop> &KDTree::getVec()
 }
 void KDTree::print()
 {
-    if(x_s_tree.getSize()==0)
+    if (x_s_tree.getSize() == 0)
     {
         return;
     }
-    int height = (*root)->getRightH() ;//find max height
-    if(height < (*root)->getLeftH())
+    int height = (*root)->getRightH(); // find max height
+    if (height < (*root)->getLeftH())
     {
         height = (*root)->getLeftH();
     }
     height++;
     print(height);
-//    int x = 0;
-//    for (int i = height; i >= 0; i--)
-//    {
-//        for (int j = 1; j < pow(2, i); j++)
-//        {
-//            cout << " ";
-//        }
-//        for (int j = 0; j < pow(2, height - i); j++)
-//        {
-//            if (x == tree.getSize())
-//            {
-//                return;
-//            }
-//            cout << tree[x].getName();
-//            x++;
-//            for (int k = 1; k < pow(2, i + 1); k++)
-//            {
-//                cout << " ";
-//            }
-//        }
-//        cout << endl;
-//    }
 }
 void KDTree::print(int line)
 {
@@ -251,13 +229,15 @@ Node *KDTree::findNearestNeighbor(Node *best_match, Node *point, Node *query, in
 {
     int axis = depth % 2;
     Node *next_point = (point->getValue()[axis] >= query->getValue()[axis]) ? point->getLeft() : point->getRight();
-    if ((!point->hasLeft() && next_point == nullptr)) {
+    if ((!point->hasLeft() && next_point == nullptr))
+    {
         next_point = point->getRight();
     }
-    if((!point->hasRight() && next_point == nullptr)) {
+    if ((!point->hasRight() && next_point == nullptr))
+    {
         next_point = point->getLeft();
     }
-    if((!point->hasRight() && !point->hasLeft()) && next_point == nullptr)
+    if ((!point->hasRight() && !point->hasLeft()) && next_point == nullptr)
         return point;
     Node *tmp = findNearestNeighbor(best_match, next_point, query, depth + 1);
     Node *best = distance(tmp, query) > distance(query, best_match) ? best_match : tmp;
@@ -276,9 +256,9 @@ Node *KDTree::findNearestNeighbor(Node *best_match, Node *point, Node *query, in
 
 void KDTree::insertToTree(PizzaShop &value)
 {
-    if(root== nullptr || x_s_tree.getSize()==0)
+    if (root == nullptr || x_s_tree.getSize() == 0)
     {
-        root = new Node*;
+        root = new Node *;
         *root = nullptr;
     }
     int res = insertToTree(*root, value, 0);
@@ -313,7 +293,7 @@ int KDTree::insertToTree(Node *node, PizzaShop &value, int depth)
     {
         // adding to root
         node = new Node(value);
-        *root=node;
+        *root = node;
         return 1;
     }
     int h = 0;
@@ -509,7 +489,7 @@ int KDTree::insertToTree(Node *node, PizzaShop &value, int depth)
 }
 void KDTree::removeFromTree(Node *node)
 {
-    if(x_s_tree.getSize()==0)
+    if (x_s_tree.getSize() == 0)
     {
         return;
     }
@@ -525,7 +505,7 @@ int KDTree::removeRec(Node *node)
     {
         Node *p = node->getParent();
         Node *n = node;
-       // node->delLeaf();
+        // node->delLeaf();
         int max_h = 0;
         while (p != nullptr)
         {
@@ -543,7 +523,7 @@ int KDTree::removeRec(Node *node)
                 return -1; // flag to show it's unbalance
             }
             // update max_h
-            if (avl)
+            if (avl < 0)
             {
                 // right is bigger
                 max_h = p->getRightH();
@@ -552,6 +532,7 @@ int KDTree::removeRec(Node *node)
             {
                 max_h = p->getLeftH();
             }
+            max_h++;
             n = p;
             p = p->getParent();
         }
@@ -560,9 +541,9 @@ int KDTree::removeRec(Node *node)
     }
     else if (node->hasRight())
     {
-        int h= getHeight(node);
+        int h = getHeight(node);
         int axis = h % 2;
-        Node *min = findmin(node->getRight(),h+1, axis);
+        Node *min = findmin(node->getRight(), h + 1, axis);
         node->copyNode(min);
         return removeRec(min);
     }
@@ -575,7 +556,8 @@ int KDTree::removeRec(Node *node)
 }
 Node *KDTree::findmin(Node *subtree, int depth, int axis)
 {
-    if(subtree->isLeaf()){
+    if (subtree->isLeaf())
+    {
         return subtree;
     }
     if (depth % 2) // Y
@@ -583,17 +565,40 @@ Node *KDTree::findmin(Node *subtree, int depth, int axis)
         if (axis == 0) // X
         {
             // have to go into both
-            Node *min_left;
-            Node *min_right;
-            if (subtree->hasRight())
+            Node *min_left = nullptr;
+            Node *min_right = nullptr;
+            if (subtree->hasLeft())
             {
                 min_left = findmin(subtree->getLeft(), depth + 1, axis);
             }
-            if (subtree->hasLeft())
+            if (subtree->hasRight())
             {
                 min_right = findmin(subtree->getRight(), depth + 1, axis);
             }
-            if (min_right->getValue().compareByX(min_left->getValue()))
+            if (min_right == nullptr)
+            { // min left is smaller
+                if (subtree->getValue().compareByX(min_left->getValue()))
+                {
+                    // minleft is smaller
+                    return min_left;
+                }
+                else
+                { // subtree is smaller
+                    return subtree;
+                }
+            }
+            else if (min_left == nullptr)
+            {
+                if (subtree->getValue().compareByX(min_right->getValue()))
+                {
+                    return min_right;
+                }
+                else
+                {
+                    return subtree;
+                }
+            }
+            else if (min_right->getValue().compareByX(min_left->getValue()))
             { // min left is smaller
                 if (subtree->getValue().compareByX(min_left->getValue()))
                 {
@@ -635,17 +640,40 @@ Node *KDTree::findmin(Node *subtree, int depth, int axis)
         if (axis == 1) // Y
         {
             // have to go into both
-            Node *min_left;
-            Node *min_right;
-            if (subtree->hasRight())
+            Node *min_left = nullptr;
+            Node *min_right = nullptr;
+            if (subtree->hasLeft())
             {
                 min_left = findmin(subtree->getLeft(), depth + 1, axis);
             }
-            if (subtree->hasLeft())
+            if (subtree->hasRight())
             {
                 min_right = findmin(subtree->getRight(), depth + 1, axis);
             }
-            if (min_right->getValue().compareByY(min_left->getValue()))
+            if (min_right == nullptr)
+            {
+                if (subtree->getValue().compareByY(min_left->getValue()))
+                {
+                    // minleft is smaller
+                    return min_left;
+                }
+                else
+                { // subtree is smaller
+                    return subtree;
+                }
+            }
+            else if (min_left == nullptr)
+            {
+                if (subtree->getValue().compareByY(min_right->getValue()))
+                {
+                    return min_right;
+                }
+                else
+                {
+                    return subtree;
+                }
+            }
+            else if (min_right == nullptr || min_right->getValue().compareByY(min_left->getValue()))
             { // min left is smaller
                 if (subtree->getValue().compareByY(min_left->getValue()))
                 {

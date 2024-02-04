@@ -1,5 +1,6 @@
 #include <iostream>
 // #include "vectorT.h"
+
 // #include "pizzashop.h"
 // #include "heapsort.h"
 #include "geometry.h"
@@ -16,6 +17,7 @@
 // #include "kdtree.cpp"
 // #include "node.cpp"
 // #include "neighborhood.cpp"
+// #include "Hash.cpp"
 
 using namespace std;
 
@@ -70,30 +72,36 @@ public:
         y = stoi(inputs[1]);
         string name = inputs[2];
         PizzaShop psb(x, y, name);
-        Node* shop_search = new Node(psb);
+        Node *shop_search = new Node(psb);
         PizzaShop name_search_result = names.search(psb);
-        Node* tmp =nullptr;
-//        kd.insertToTree(psb);
+        Node *tmp = nullptr;
+        //        kd.insertToTree(psb);
 
-        if(kd.getVec().getSize())
-            tmp = kd.findNearestNeighbor(nullptr,kd.getRoot(),shop_search,0);
-        if(tmp) {
+        if (kd.getVec().getSize())
+            tmp = kd.findNearestNeighbor(nullptr, kd.getRoot(), shop_search, 0);
+        if (tmp)
+        {
             exist = tmp->getValue().hasSamePoint(psb);
         }
-        if(exist) {
+        if (exist)
+        {
             cerr << "Pizza shop with this coordinates has exist!" << endl;
         }
-        else {
-            if (name_search_result.getFind()) {
+        else
+        {
+            if (name_search_result.getFind())
+            {
                 cerr << "Pizza shop with this name has exist already!" << endl;
-            } else {
+            }
+            else
+            {
                 kd.insertToTree(psb);
                 names.insert(psb);
                 myvec.pushBack(psb);
                 main_brs.pushBack(psb);
             }
         }
-}
+    }
 
     static void addBranch(Vector<string> inputs)
     {
@@ -105,23 +113,29 @@ public:
         string name = inputs[2];
         string main_br = inputs[3];
         PizzaShop psb(x, y, name, main_br);
-        Node* shop_search = new Node(psb);
+        Node *shop_search = new Node(psb);
         PizzaShop name_search_result = names.search(psb);
-        Node* tmp =nullptr;
-//        kd.insertToTree(psb);
+        Node *tmp = nullptr;
+        //        kd.insertToTree(psb);
 
-        if(kd.getVec().getSize())
-            tmp = kd.findNearestNeighbor(nullptr,kd.getRoot(),shop_search,0);
-        if(tmp) {
+        if (kd.getVec().getSize())
+            tmp = kd.findNearestNeighbor(nullptr, kd.getRoot(), shop_search, 0);
+        if (tmp)
+        {
             exist = tmp->getValue().hasSamePoint(psb);
         }
-        if(exist) {
+        if (exist)
+        {
             cerr << "Pizza shop with this coordinates has exist!" << endl;
         }
-        else {
-            if (name_search_result.getFind()) {
+        else
+        {
+            if (name_search_result.getFind())
+            {
                 cerr << "Pizza shop with this name has exist already!" << endl;
-            } else {
+            }
+            else
+            {
                 kd.insertToTree(psb);
                 names.insert(psb);
                 myvec.pushBack(psb);
@@ -141,29 +155,34 @@ public:
     static void deleteBranch(Vector<string> inputs)
     {
         // Delete a branch of PizzaShop with x,y coordinates and name.
-        if(kd.getVec().getSize() == 0) {
+        if (kd.getVec().getSize() == 0)
+        {
             cout << "KDTree is empty!" << endl;
             return;
         }
-        int x,y;
+        int x, y;
         x = stoi(inputs[0]);
         y = stoi(inputs[1]);
-        PizzaShop tmp(x,y,"tmp", false);
-        Node* query = new Node(tmp);
-        Node* find = kd.findNearestNeighbor(nullptr,kd.getRoot(),query,0);
-        if(find->getValue().hasSamePoint(tmp)) {
-            if(find->getValue().isMainBranch())
+        PizzaShop tmp(x, y, "tmp", false);
+        Node *query = new Node(tmp);
+        Node *find = kd.findNearestNeighbor(nullptr, kd.getRoot(), query, 0);
+        if (find->getValue().hasSamePoint(tmp))
+        {
+            if (find->getValue().isMainBranch())
                 cout << "Cannot remove this node!" << endl;
-            else{
-                for(auto &shop : main_brs ) {
-                    if(shop.getName() == find->getValue().getMainBranchName())
+            else
+            {
+                for (auto &shop : main_brs)
+                {
+                    if (shop.getName() == find->getValue().getMainBranchName())
                         shop.reduceBranch();
                 }
                 kd.removeFromTree(find);
                 myvec.erase(find->getValue());
             }
         }
-        else {
+        else
+        {
             cout << "This point doesn't exist!" << endl;
         }
     }
@@ -250,7 +269,7 @@ public:
     static void undoCommand(Vector<string> inputs)
     {
     }
-    static void print(Vector<string>inputs)
+    static void print(Vector<string> inputs)
     {
         kd.print();
     }
@@ -258,7 +277,7 @@ public:
 
 Vector<pair<string, function<void(Vector<string> inputs)>>> Commands::command_vector =
     {
-        {"print",Commands::print},
+        {"print", Commands::print},
         {"Add-N", Commands::addNeighberhood},
         {"Add-P", Commands::addPizzaShop},
         {"Add-Br", Commands::addBranch},
