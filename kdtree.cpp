@@ -262,6 +262,37 @@ Node *KDTree::findNearestNeighbor(Node *best_match, Node *point, Node *query, in
         return tmp;
 }
 
+Node *KDTree::findNearestNeighbor(Node* best_match,Node* point,Node* query,int depth,int r,Vector<Node*>& result) {
+    int axis = depth % 2;
+    if(distance(point, query) <= r)
+        result.pushBack(point);
+    Node *next_point = (point->getValue()[axis] >= query->getValue()[axis]) ? point->getLeft() : point->getRight();
+    if ((!point->hasLeft() && next_point == nullptr)) {
+        next_point = point->getRight();
+    }
+    if((!point->hasRight() && next_point == nullptr)) {
+        next_point = point->getLeft();
+    }
+    if((!point->hasRight() && !point->hasLeft()) && next_point == nullptr)
+        return point;
+    Node *tmp = findNearestNeighbor(best_match, next_point, query, depth + 1,r,result);
+    Node *best = distance(tmp, query) > distance(query, best_match) ? best_match : tmp;
+    if (r > abs(point->getValue()[axis] - query->getValue()[axis]))
+    {
+        Node *other = (next_point == point->getLeft()) ? point->getRight() : point->getLeft();
+        tmp = distance(query, point) > distance(query, best) ? best : point;
+        if (other) {
+            if(distance(other, query) <= r)
+                result.pushBack(other);
+            tmp = distance(tmp, query) > distance(query, other) ? other : tmp;
+        }
+    }
+    if (distance(tmp, query) > distance(query, best))
+        return best;
+    else
+        return tmp;
+}
+
 void KDTree::insertToTree(PizzaShop &value)
 {
     if (root == nullptr || x_s_tree.getSize() == 0)

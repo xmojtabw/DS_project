@@ -35,7 +35,8 @@ public:
     int insertToTree(Node *node, PizzaShop &value, int depth);
 
     int findDepth(Node *);
-    Node *findNearestNeighbor(Node *best_match, Node *point, Node *query, int depth);
+    Node *findNearestNeighbor(Node *best_match,Node *point,Node *query,int depth);
+    Node *findNearestNeighbor(Node* best_match,Node* point,Node* query,int depth,int r,Vector<Node*>& result);
     void insertToTree(PizzaShop &value);
     void removeFromTree(Node *node);
     int removeRec(Node *node);
