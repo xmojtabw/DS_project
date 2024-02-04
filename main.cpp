@@ -1,5 +1,6 @@
 #include <iostream>
 // #include "vectorT.h"
+
 // #include "pizzashop.h"
 // #include "heapsort.h"
 #include "geometry.h"
@@ -16,6 +17,7 @@
 // #include "kdtree.cpp"
 // #include "node.cpp"
 // #include "neighborhood.cpp"
+// #include "Hash.cpp"
 
 using namespace std;
 
@@ -107,12 +109,14 @@ public:
                     myvec.pushBack(psb);
                     main_brs.pushBack(psb);
                 }
+
             }
         }
-}
+    }
 
     static void addBranch(Vector<string> inputs)
     {
+
         if(inputs.getSize() != 4) {
             cerr << "Command not found.for see commands enter Show_commands" << endl;
         }
@@ -146,7 +150,7 @@ public:
                     myvec.pushBack(psb);
                     main_brs.pushBack(psb);
                 }
-            }
+
             for (auto &brs: main_brs) {
                 if (main_br == brs.getName()) {
                     brs.addBranch();
@@ -183,11 +187,13 @@ public:
                     }
                     kd.removeFromTree(find);
                     myvec.erase(find->getValue());
-                }
-            } else {
+            } 
+          else 
+          {
                 cout << "This point doesn't exist!" << endl;
             }
         }
+
     }
 
     static void pizzaShopsNeighborhood(Vector<string> inputs)
@@ -388,8 +394,8 @@ public:
         }
     }
 
-
     static void print(Vector<string>inputs)
+
     {
         kd.print();
     }
@@ -411,6 +417,7 @@ Vector<pair<string, function<void(Vector<string> inputs)>>> Commands::command_ve
     {"Undo", Commands::undoCommand},
     {"print",Commands::print}
 };
+
 
 
 int main()
