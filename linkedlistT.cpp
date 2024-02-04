@@ -1,4 +1,5 @@
 #include "linkedlistT.h"
+#include "neighberhood.h"
 
 template <class T>
 node_t<T>::node_t(int _key, node_t *_next, T value) {
@@ -8,15 +9,17 @@ node_t<T>::node_t(int _key, node_t *_next, T value) {
 }
 
 template<>
-node_t<Vector<node_t<KDTree>>>::node_t(int _key, node_t<Vector<node_t<KDTree>>> *_next, Vector<node_t<KDTree>> value) {
+node_t<Vector<node_t<Vector<PizzaShop>>>>::node_t(int _key, node_t<Vector<node_t<Vector<PizzaShop>>>> *_next, Vector<node_t<Vector<PizzaShop>>> _value) {
     this->key = _key;
+    this->value = _value;
+    this->next = _next;
 
 }
 template<>
-node_t<KDTree>::node_t(int _key, node_t<KDTree> *_next, KDTree value) {
+node_t<Vector<PizzaShop>>::node_t(int _key, node_t<Vector<PizzaShop>> *_next, Vector<PizzaShop> value) {
     this->key = _key;
     this->next = _next;
-    this->value = KDTree(value);
+    this->value = Vector<PizzaShop>(value);
 }
 
 template<class T>
@@ -25,22 +28,44 @@ int node_t<T>::get_key() const {
 }
 
 template<>
-int node_t<PizzaShop>::get_key() const {
+int node_t<PizzaShop>::get_key()  const{
+    return this->key;
+}
+
+template<>
+int node_t<Vector<node_t<Vector<PizzaShop>>>>::get_key() const {
     return this->key;
 }
 
 template<class T>
-T node_t<T>::get_value() const {
+T node_t<T>::get_value() {
     return this->value;
 }
 
 template<>
-PizzaShop node_t<PizzaShop>::get_value() const {
+PizzaShop node_t<PizzaShop>::get_value()  {
     return this->value;
 }
 
 template<>
-Vector<node_t<KDTree>> node_t<Vector<node_t<KDTree>>>::get_value() const {
+Neighberhood node_t<Neighberhood>::get_value()  {
+    return this->value;
+}
+
+
+template<>
+Vector<PizzaShop> node_t<Vector<PizzaShop>>::get_value() {
+    return this->value;
+}
+
+
+template<>
+Vector<Neighberhood> node_t<Vector<Neighberhood>>::get_value() {
+    return this->value;
+}
+
+template<>
+Vector<node_t<Vector<PizzaShop>>> node_t<Vector<node_t<Vector<PizzaShop>>>>::get_value()  {
     return this->value;
 }
 
@@ -54,6 +79,11 @@ node_t<PizzaShop>* node_t<PizzaShop>::get_next() const {
     return this->next;
 }
 
+template <>
+node_t<Vector<node_t<Vector<PizzaShop>>>>* node_t<Vector<node_t<Vector<PizzaShop>>>>::get_next() const {
+    return this->next;
+}
+
 template <class T>
 Linkedlist<T>::Linkedlist() : first(nullptr), last(nullptr), size(0) {}
 
@@ -61,7 +91,10 @@ template<>
 Linkedlist<PizzaShop>::Linkedlist() : first(nullptr), last(nullptr), size(0) {}
 
 template<>
-Linkedlist<Vector<node_t<KDTree>>>::Linkedlist() : first(nullptr), last(nullptr), size(0) {}
+Linkedlist<Vector<node_t<Vector<PizzaShop>>>>::Linkedlist() : first(nullptr), last(nullptr), size(0) {}
+
+template<>
+Linkedlist<Neighberhood>::Linkedlist() : first(nullptr), last(nullptr), size(0) {}
 
 
 Linkedlist<KDTree>::Linkedlist(node_t<KDTree>* _first) {
@@ -165,8 +198,8 @@ void Linkedlist<KDTree>::push_back(int key, KDTree value) {
 }
 
 template<>
-void Linkedlist<Vector<node_t<KDTree>>>::push_back(int key, Vector<node_t<KDTree>> value) {
-    node_t<Vector<node_t<KDTree>>>* new_node = new node_t<Vector<node_t<KDTree>>>(key,nullptr,value);
+void Linkedlist<Vector<node_t<Vector<PizzaShop>>>>::push_back(int key,Vector<node_t<Vector<PizzaShop>>> value) {
+    node_t<Vector<node_t<Vector<PizzaShop>>>>* new_node = new node_t<Vector<node_t<Vector<PizzaShop>>>>(key,nullptr,value);
     if(this->first == nullptr) {
         this->first = new_node;
         this->first->next = nullptr;
@@ -179,7 +212,7 @@ void Linkedlist<Vector<node_t<KDTree>>>::push_back(int key, Vector<node_t<KDTree
 }
 
 template<>
-void Linkedlist<PizzaShop>::push_back(int key, PizzaShop value) {
+void Linkedlist<PizzaShop>::push_back(int key,PizzaShop value) {
     node_t<PizzaShop>* new_node = new node_t<PizzaShop>(key, nullptr,value);
     if(this->first == nullptr) {
         this->first = new_node;
@@ -193,6 +226,19 @@ void Linkedlist<PizzaShop>::push_back(int key, PizzaShop value) {
 }
 
 
+template<>
+void Linkedlist<Neighberhood>::push_back(int key,Neighberhood value) {
+    node_t<Neighberhood>* new_node = new node_t<Neighberhood>(key, nullptr,value);
+    if(this->first == nullptr) {
+        this->first = new_node;
+        this->first->next = nullptr;
+    }
+    else {
+        this->last->next = new_node;
+    }
+    this->last = new_node;
+    this->size++;
+}
 
 template<class T>
 node_t<T>* Linkedlist<T>::search(int _key) {
@@ -216,12 +262,11 @@ node_t<PizzaShop>* Linkedlist<PizzaShop>::search(int _key) {
     return tmp;
 }
 
-
 template<>
-node_t<PizzaShop>* Linkedlist<PizzaShop>::search(int _key,PizzaShop val) {
-    node_t<PizzaShop>* tmp = this->first;
+node_t<Neighberhood>* Linkedlist<Neighberhood>::search(int _key) {
+    node_t<Neighberhood>* tmp = this->first;
     while(tmp) {
-        if(tmp->key == _key && tmp->get_value() == val)
+        if(tmp->key == _key)
             break;
         tmp = tmp->next;
     }
@@ -230,8 +275,21 @@ node_t<PizzaShop>* Linkedlist<PizzaShop>::search(int _key,PizzaShop val) {
 
 
 template<>
-node_t<Vector<node_t<KDTree>>>* Linkedlist<Vector<node_t<KDTree>>>::search(int _key) {
-    node_t<Vector<node_t<KDTree>>>* tmp = this->first;
+node_t<PizzaShop>* Linkedlist<PizzaShop>::search(int _key,PizzaShop val) {
+    node_t<PizzaShop>* tmp = this->first;
+    while(tmp) {
+        if(tmp->key == _key && tmp->get_value().getName() == val.getName())
+            break;
+        tmp = tmp->next;
+    }
+    return tmp;
+}
+
+
+
+template<>
+node_t<Vector<node_t<Vector<PizzaShop>>>>* Linkedlist<Vector<node_t<Vector<PizzaShop>>>>::search(int _key) {
+    node_t<Vector<node_t<Vector<PizzaShop>>>>* tmp = this->first;
     while(tmp && tmp->value.getSize()) {
         if(tmp->value[0].get_key() == _key)
             break;
@@ -263,6 +321,7 @@ node_t<PizzaShop>* Linkedlist<PizzaShop>::get_first() const {
     return this->first;
 }
 
-node_t<KDTree> *Linkedlist<KDTree>::get_first() const {
+template<>
+node_t<Vector<node_t<Vector<PizzaShop>>>> *Linkedlist<Vector<node_t<Vector<PizzaShop>>>>::get_first() const {
     return this->first;
 }

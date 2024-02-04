@@ -13,8 +13,9 @@ private:
 public:
     size_t hash_string(const std::string& str);
     Hash();
-    void insert(int key,T value);
+    void insert(int key, T value);
     void insert(T value);
+    void add(int key,int subkey,T value);
     T* search(int key);
     T search(T key);
     T search(std::string key);

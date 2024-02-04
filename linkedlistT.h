@@ -10,15 +10,15 @@ template <class T>
 class node_t {
     friend class Linkedlist<T>;
 private:
-    T value;
     int key;
     node_t* next;
 
 public:
+    T value;
     node_t() = default;
     node_t(int _key, node_t* _next,T value);
     int get_key() const;
-    T get_value() const;
+    T get_value();
     node_t<T>* get_next() const;
 
 };
@@ -32,7 +32,7 @@ public:
     Linkedlist();
     Linkedlist(node_t<T>* first);
     Linkedlist(const Linkedlist<T> &other);
-    void push_back(int key,T value);
+    void push_back(int key, T value);
     node_t<T>* search(int _key);
     node_t<T>* search(int _key,T val);
     node_t<T>* pop_anywhere(int _key);

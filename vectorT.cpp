@@ -21,13 +21,16 @@ Vector<T>::Vector(T *p, int _size) : capacity(2 * size), size(_size)
     }
 }
 template <class T>
-Vector<T>::Vector(const Vector<T>& other) : capacity(other.capacity), size(other.size)
+Vector<T>::Vector(const Vector<T>& other)
 {
+    this->size = other.size;
+    this->capacity = other.capacity;
     ptr = new T[capacity];
     for (int i = 0; i < size; i++)
     {
         ptr[i] = other.ptr[i];
     }
+
 }
 
 template <class T>
