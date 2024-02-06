@@ -1,7 +1,7 @@
 # Implementation of *kd tree* in cpp language
 You can read about K-D Trees [here](https://www.baeldung.com/cs/k-d-trees).\
 Note: In this implementation we save pizza shops which has a x and y coordinates and a name in a k-d tree.\
-Note2: You can read about project [here].
+Note2: You can read about project [here](/DS-Project.pdf).
 ## Commands
 - Add-N [name] (X1,Y1) (X2,Y2) (X3,Y3) (X4,Y4)\
    *(Adds a neighborhood which is rectangle.)*[^1]
