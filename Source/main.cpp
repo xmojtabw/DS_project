@@ -144,7 +144,6 @@ public:
                     kd.insertToTree(psb);
                     names.insert(psb);
                     myvec.pushBack(psb);
-                    main_brs.pushBack(psb);
                 }
             }
             for (auto &brs: main_brs) {
@@ -219,7 +218,7 @@ public:
                         cerr << "Neighborhood not has any shop!" << endl;
                     }
                     for (auto &shops: neighborhood_shops) {
-                        cout << shops;
+                        cout << shops << endl;
                     }
                 }
             }
